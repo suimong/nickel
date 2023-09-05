@@ -729,6 +729,7 @@ InfixUOpOrLazyBOp: UnaryOp = {
 InfixOp: InfixOp = {
     <InfixBOp> => <>.into(),
     <InfixUOpOrLazyBOp> => <>.into(),
+    // <RecordOperationChain> => <>.into(),
 }
 
 CurriedOp: RichTerm = {
@@ -753,6 +754,28 @@ CurriedOp: RichTerm = {
             )
             .with_pos(mk_pos(src_id, l, r))
         ),
+    <l: Ident> "." <r: @R> =>
+        mk_fun!(
+            "x1", 
+            "x2",
+            mk_term::op1(
+                UnaryOp::StaticAccess(
+                    LocIdent::new_with_pos("x2", mk_term::var("x2").pos)
+                ),
+                mk_term::var("x1")
+            )
+        ),
+    // <l: Ident> "." <r: @R> =>
+    //     mk_fun!(
+    //         "x1", 
+    //         "x2",
+    //         mk_term::op1(
+    //             UnaryOp::StaticAccess(
+    //                 LocIdent::new_with_pos(l.label(), mk_term::var("x2").pos)
+    //             ),
+    //             mk_term::var("x1")
+    //         )
+    //     ),
     //<l: @L> "->" <r: @R> =>?
     //    UniTerm::from(
     //        mk_fun!("x1", "x2",
