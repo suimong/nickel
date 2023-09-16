@@ -4,3 +4,6 @@ build-backend = "maturin"
 
 [tool.maturin]
 
+[project]
+name = "pyckel"
+version = "1.1.2"
